@@ -97,7 +97,7 @@ if [ -n "${ZWIFT_USERNAME}" -a -z "${ZWIFT_PASSWORD}" -a -x "$(command -v secret
     echo "Looking up Zwift password for ${ZWIFT_USERNAME}..."
     PASSWORD_SECRET_NAME="zwift-password-${ZWIFT_USERNAME}"
 
-    secret-tool lookup application zwift username ${ZWIFT_USERNAME} | ${CONTAINER_TOOL} secret create $([ "${CONTAINER_TOOL}" == "podman" ] && echo "--replace=true") "${PASSWORD_SECRET_NAME}" - > /dev/null
+    secret-tool lookup application zwift username ${ZWIFT_USERNAME} | ${CONTAINER_TOOL} secret create $([ "${CONTAINER_TOOL}" == "podman" ] && ${CONTAINER_TOOL} secret exists "${PASSWORD_SECRET_NAME}" && echo "--replace=true") "${PASSWORD_SECRET_NAME}" - > /dev/null
 
     # secret will not be created if the password does not exist
     if ${CONTAINER_TOOL} secret exists "${PASSWORD_SECRET_NAME}"; then
